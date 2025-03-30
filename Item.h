@@ -36,6 +36,7 @@ public:
     void setUpcCode(const string& upcCode);
     void setPrice(double price);
     void setAisle(const string& aisle);
+    void searchItem(const string& upcCode);
     void setQuantity(int quantity);
     
     // Modify quantity (for adding to or removing from inventory)
@@ -54,5 +55,53 @@ public:
     // Output stream operator for displaying item information
     friend ostream& operator<<(ostream& os, const Item& item);
 };
+class ShopingCart{
+private:
+    vector<Item> cart; // Vector to store items in the shopping cart
+    double total;      // Total cost of items in the cart
+    int quantity;    // Number of items in the cart    
+    
+public:
+    // Default constructor
+    void addItem(const Item& item);
+    void removeItem(const string& upcCode);
+    double calculateTotal();
+    void displayCart();
+    void clearCart();
+
+};
+
+class Transaction{
+private:
+    vector<Item> cart; // Vector to store items in the transaction
+    double total;       // Total cost of the transaction
+    string date;       // Date of the transaction
+    string time;       // Time of the transaction
+    string cashier;    // Cashier handling the transaction
+public:
+
+    void addItem(const Item& item);
+    void removeItem(const string& upcCode);
+    void displayTransaction();
+    double calculateTotal();
+
+    // Setters
+    void setDate(const string& date);
+    void setTime(const string& time);
+    void setCashier(const string& cashier);
+
+    // Getters
+    string getDate() const;
+    string getTime() const;
+    string getCashier() const;
+
+    // Additional functions
+    void clearTransaction();
+    void printReceipt();
+    void saveTransaction();
+    void loadTransaction();
+
+};
+
 
 #endif // ITEM_H
