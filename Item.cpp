@@ -334,4 +334,20 @@ int main() {
     transaction.clearTransaction();
     cout << "Transaction cleared." << endl;
     return 0;
+
+    //Menu-driven loop, can be changed during runtime
+    int choice;
+    do {
+        cout << "\n===================================\n";
+        cout << "\nGrocery store Simulator - Menu";
+        cout << "\n1. Add item to Cart";
+        cout << "\n2. Remove item from Cart (UPC Code)";
+        cout << "\n3. Display Shoppng Cart";
+        cout << "\n4. Clear Shopping Cart";
+        cout << "\n5. Exit";
+        cout << "\n===================================";
+        cout << "\nEnter your choice: ";
+        cin >> choice;
+    
+        
 }
