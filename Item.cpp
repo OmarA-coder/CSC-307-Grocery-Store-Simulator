@@ -335,7 +335,7 @@ int main() {
     cout << "Transaction cleared." << endl;
     return 0;
 
-    //Menu-driven loop, can be changed during runtime
+    //Menu-driven loop, so data can be changed during runtime
     int choice;
     do {
         cout << "\n===================================\n";
@@ -349,5 +349,5 @@ int main() {
         cout << "\nEnter your choice: ";
         cin >> choice;
     
-        
+    } while (choice != 5);
 }
