@@ -117,7 +117,7 @@ ostream& operator<<(ostream& os, const Item& item) {
     return os;
 }
 
-// Shopping cart class implementation
+// ShopingCart class implementation
 void ShopingCart::addItem(const Item& item) {
     cart.push_back(item);
     total += item.getPrice() * item.getQuantity();
@@ -188,42 +188,70 @@ void Transaction::removeItem(const string& upcCode) {
         }
     }
 }
-double Transaction::calculateTotal() {
-    double total;
-    for (const auto& item : cart) {
+
+
+void Transaction::finalizeCart(const ShopingCart& cart) {
+    // Clear any existing items in the transaction
+    this->cart.clear();
+    total = 0.0;
+    
+    // Copy all items from the shopping cart to the transaction
+    for (const auto& item : cart.getCart()) {
+        this->cart.push_back(item);
         total += item.getPrice() * item.getQuantity();
     }
-    return total;
+}
+double Transaction::calculateTotal() {
+    double sum = 0.0;  // Initialize accumulator correctly
+    for (const auto& item : cart) {
+        sum += item.getPrice() * item.getQuantity();
+    }
+    return sum;
 }
 
 void Transaction::printReceipt() {
-    cout << "\n=================== Receipt ===================\n";
-    cout << left << setw(20) << "Item Name" 
-         << setw(15) << "UPC Code" 
-         << setw(10) << "Price($)" 
-         << setw(10) << "Aisle" 
-         << right << setw(10) << "Quantity" 
-         << right << setw(15) << "Subtotal($)" << endl;
-    cout << string(70, '-') << endl;
+    cout << "\n================ GROCERY STORE RECEIPT ================\n";
+    
+    //Printing the receipt header
+    cout << "Date: " << (date.empty() ? "N/A" : date) << endl;
+    cout << "Time: " << (time.empty() ? "N/A" : time) << endl;
+    cout << "Cashier: " << (cashier.empty() ? "N/A" : cashier) << endl;
 
-    // Display each item as a row
+    cout << "Receipt #: " << rand() % 10000 + 10000 << endl;
+    cout << "\n";
+    cout << left << setw(20) << "Item" 
+         << setw(8) << "Qty" 
+         << right << setw(10) << "Price" 
+         << right << setw(12) << "Subtotal" << endl;
+    cout << string(50, '-') << endl;
+
+    // Displaying each item
     for (const auto& item : cart) {
         double subtotal = item.getPrice() * item.getQuantity();
         cout << left << setw(20) << item.getName()
-             << setw(15) << item.getUpcCode()
-             << setw(10) << fixed << setprecision(2)  << item.getPrice()
-             << setw(10)  << item.getAisle()
-             << right  << setw(10)  << item.getQuantity()
-             << right  << setw(15)  << fixed  << setprecision(2)  << subtotal  << endl;
+             << setw(8) << item.getQuantity()
+             << right << setw(10) << fixed << setprecision(2) << "$" << item.getPrice()
+             << right << setw(12) << fixed << setprecision(2) << "$" << subtotal << endl;
     }
 
-    // Display the total with proper alignment
-    cout  << string(70, '-')  << endl;
-    cout  << right  << setw(55)  <<"Total: $" 
-          << fixed  << setprecision(2)  <<" "<<setw(15)<<total<<endl;
-    cout  <<"===================================================\n";
-}
+    // Displaying the total
+    cout << string(50, '-') << endl;
+    cout << left << setw(28) << "Total Items:" << cart.size() << endl;
+    cout << left << setw(28) << "Total:" << right << "$" << fixed << setprecision(2) << total << endl;
+    cout << "\n";
+    
 
+    cout << "Payment Method: Cash" << endl;
+    cout << "Amount Tendered: $" << fixed << setprecision(2) << (total + 5.0) << endl;
+    cout << "Change: $" << fixed << setprecision(2) << 5.0 << endl;
+    
+    cout << "\nThank you for shopping with us!" << endl;
+    cout << "Please come again soon." << endl;
+    cout << "===================================================\n";
+}
+const vector<Item>& ShopingCart::getCart() const {
+    return cart;
+}
 void Transaction::setTime(const string& time) {
     this->time = time;
 }

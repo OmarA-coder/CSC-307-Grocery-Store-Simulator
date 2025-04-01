@@ -67,6 +67,7 @@ public:
     void removeItem(const string& upcCode);
     double calculateTotal();
     void displayCart();
+    const vector<Item>& getCart() const;
     void clearCart();
 
 };
@@ -79,9 +80,10 @@ private:
     string time;       // Time of the transaction
     string cashier;    // Cashier handling the transaction
 public:
-
     void addItem(const Item& item);
     void removeItem(const string& upcCode);
+
+    void finalizeCart(const ShopingCart& cart);
     void displayTransaction();
     double calculateTotal();
 
