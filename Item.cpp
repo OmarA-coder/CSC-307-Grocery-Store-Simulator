@@ -376,6 +376,59 @@ int main() {
         cout << "\n===================================";
         cout << "\nEnter your choice: ";
         cin >> choice;
+    switch (choice) {
+        case 1: {
+            // Input details for new item
+            string name, upc, aisle;
+            double price;
+            int quantity;
+            cout << "\nEnter item name: ";
+            cin.ignore(); // clear newline from previous input
+            getline(cin, name);
+            cout << "Enter UPC code: ";
+            getline(cin, upc);
+            cout << "Enter price: ";
+            cin >> price;
+            cout << "Enter aisle: ";
+            cin.ignore();  // clear newline
+            getline(cin, aisle);
+            cout << "Enter quantity: ";
+            cin >> quantity;
+            
+            // Create new item and add to cart
+            Item newItem(name, upc, price, aisle, quantity);
+            cart.addItem(newItem);
+            cout << "\nItem added to cart." << endl;
+            break;
+        }
+        case 2: {
+            // Remove an item by UPC code
+            string upcToRemove;
+            cout << "\nEnter the UPC code of the item to remove: ";
+            cin.ignore(); // clear newline
+            getline(cin, upcToRemove);
+            cart.removeItem(upcToRemove);
+            cout << "Item removed (if it existed) from the cart." << endl;
+            break;
+        }
+        case 3: {
+            // Display the contents of the shopping cart
+            cart.displayCart();
+            break;
+        }
+        case 4: {
+            // Clear the shopping cart entirely
+            cart.clearCart();
+            cout << "\nShopping cart cleared." << endl;
+            break;
+        }
+        case 5: {
+            cout << "\nExiting..." << endl;
+            break;
+        }
+        default:
+            cout << "\nInvalid choice. Please select a valid option." << endl;
+    }
     
     } while (choice != 5);
 }
