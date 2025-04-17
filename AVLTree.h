@@ -256,6 +256,3 @@ public:
         return root == nullptr;
     }
 };
-
-
-`
