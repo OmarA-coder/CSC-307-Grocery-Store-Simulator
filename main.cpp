@@ -67,7 +67,7 @@ void findItem(AVLTree& inventory) {
     GroceryItem* item = inventory.search(upcCode);
     
     if (item != nullptr) {
-        cout << "\nItem Found:" << :endl;
+        cout << "\nItem Found:" << endl;
         cout << "UPC Code: " << item->getUpcCode() << endl;
         cout << "Name: " << item->getName() << endl;
         cout << "Price: $" << item->getPrice() << endl;
