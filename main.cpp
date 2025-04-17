@@ -2,153 +2,159 @@
 #include <limits>
 #include "AVLTree.h"
 
+//Namespace directives to clean up code
+using std::cout;
+using std::cin;
+using std::string;
+using std::endl;
+
 void displayMenu() {
-    std::cout << "\n===== GROCERY STORE INVENTORY SYSTEM =====" << std::endl;
-    std::cout << "1. Add New Item" << std::endl;
-    std::cout << "2. Find Item by UPC" << std::endl;
-    std::cout << "3. Update Item" << std::endl;
-    std::cout << "4. Delete Item" << std::endl;
-    std::cout << "5. Display All Items" << std::endl;
-    std::cout << "0. Exit" << std::endl;
-    std::cout << "Enter your choice: ";
+    cout << "\n===== GROCERY STORE INVENTORY SYSTEM =====" << endl;
+    cout << "1. Add New Item" << endl;
+    cout << "2. Find Item by UPC" << endl;
+    cout << "3. Update Item" << endl;
+    cout << "4. Delete Item" << endl;
+    cout << "5. Display All Items" << endl;
+    cout << "0. Exit" << endl;
+    cout << "Enter your choice: ";
 }
 
 void addItem(AVLTree& inventory) {
-    std::string name, upcCode, aisle;
+    string name, upcCode, aisle;
     double price;
     int quantity;
     
-    std::cout << "\n--- Add New Item ---" << std::endl;
+    cout << "\n--- Add New Item ---" << endl;
     
-    std::cout << "Enter UPC Code: ";
-    std::cin >> upcCode;
+    cout << "Enter UPC Code: ";
+    cin >> upcCode;
     
     // Check if UPC already exists
     if (inventory.search(upcCode) != nullptr) {
-        std::cout << "Error: Item with UPC " << upcCode << " already exists." << std::endl;
+        cout << "Error: Item with UPC " << upcCode << " already exists." << endl;
         return;
     }
     
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+   cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
-    std::cout << "Enter Name: ";
-    std::getline(std::cin, name);
+   cout << "Enter Name: ";
+   std::getline(std::cin, name);
     
-    std::cout << "Enter Price: $";
-    std::cin >> price;
+    cout << "Enter Price: $";
+    cin >> price;
     
-    std::cout << "Enter Quantity: ";
-    std::cin >> quantity;
+    cout << "Enter Quantity: ";
+    cin >> quantity;
     
-    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     
-    std::cout << "Enter Aisle: ";
+    cout << "Enter Aisle: ";
     std::getline(std::cin, aisle);
     
     GroceryItem newItem(name, upcCode, price, quantity, aisle);
     inventory.insert(newItem);
     
-    std::cout << "Item added successfully!" << std::endl;
+    cout << "Item added successfully!" << std::endl;
 }
 
 void findItem(AVLTree& inventory) {
-    std::string upcCode;
+    string upcCode;
     
-    std::cout << "\n--- Find Item ---" << std::endl;
-    std::cout << "Enter UPC Code: ";
-    std::cin >> upcCode;
+    cout << "\n--- Find Item ---" << std::endl;
+    cout << "Enter UPC Code: ";
+    cin >> upcCode;
     
     GroceryItem* item = inventory.search(upcCode);
     
     if (item != nullptr) {
-        std::cout << "\nItem Found:" << std::endl;
-        std::cout << "UPC Code: " << item->getUpcCode() << std::endl;
-        std::cout << "Name: " << item->getName() << std::endl;
-        std::cout << "Price: $" << item->getPrice() << std::endl;
-        std::cout << "Quantity: " << item->getQuantity() << std::endl;
-        std::cout << "Aisle: " << item->getAisle() << std::endl;
+        cout << "\nItem Found:" << :endl;
+        cout << "UPC Code: " << item->getUpcCode() << endl;
+        cout << "Name: " << item->getName() << endl;
+        cout << "Price: $" << item->getPrice() << endl;
+        cout << "Quantity: " << item->getQuantity() << endl;
+        cout << "Aisle: " << item->getAisle() << endl;
     } else {
-        std::cout << "Item with UPC " << upcCode << " not found." << std::endl;
+        cout << "Item with UPC " << upcCode << " not found." << endl;
     }
 }
 
 void updateItem(AVLTree& inventory) {
-    std::string upcCode;
+   string upcCode;
     
-    std::cout << "\n--- Update Item ---" << std::endl;
-    std::cout << "Enter UPC Code of the item to update: ";
-    std::cin >> upcCode;
+    cout << "\n--- Update Item ---" << endl;
+    cout << "Enter UPC Code of the item to update: ";
+    cin >> upcCode;
     
     GroceryItem* item = inventory.search(upcCode);
     
     if (item != nullptr) {
-        std::string name = item->getName();
+        string name = item->getName();
         double price = item->getPrice();
         int quantity = item->getQuantity();
-        std::string aisle = item->getAisle();
+        string aisle = item->getAisle();
         
-        std::cout << "\nCurrent Item Details:" << std::endl;
-        std::cout << "UPC Code: " << item->getUpcCode() << std::endl;
-        std::cout << "Name: " << name << std::endl;
-        std::cout << "Price: $" << price << std::endl;
-        std::cout << "Quantity: " << quantity << std::endl;
-        std::cout << "Aisle: " << aisle << std::endl;
+        cout << "\nCurrent Item Details:" << endl;
+        cout << "UPC Code: " << item->getUpcCode() << endl;
+        cout << "Name: " << name << endl;
+        cout << "Price: $" << price << endl;
+        cout << "Quantity: " << quantity << endl;
+        cout << "Aisle: " << aisle << endl;
         
         char choice;
-        std::cout << "\nUpdate name (y/n)? ";
-        std::cin >> choice;
+        cout << "\nUpdate name (y/n)? ";
+        cin >> choice;
         if (choice == 'y' || choice == 'Y') {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Enter new name: ";
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Enter new name: ";
             std::getline(std::cin, name);
         } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
         
-        std::cout << "Update price (y/n)? ";
-        std::cin >> choice;
+        cout << "Update price (y/n)? ";
+        cin >> choice;
         if (choice == 'y' || choice == 'Y') {
-            std::cout << "Enter new price: $";
-            std::cin >> price;
+            cout << "Enter new price: $";
+            cin >> price;
         }
         
-        std::cout << "Update quantity (y/n)? ";
-        std::cin >> choice;
+        cout << "Update quantity (y/n)? ";
+        cin >> choice;
         if (choice == 'y' || choice == 'Y') {
-            std::cout << "Enter new quantity: ";
-            std::cin >> quantity;
+            cout << "Enter new quantity: ";
+            cin >> quantity;
         }
         
-        std::cout << "Update aisle (y/n)? ";
-        std::cin >> choice;
+        cout << "Update aisle (y/n)? ";
+        cin >> choice;
         if (choice == 'y' || choice == 'Y') {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Enter new aisle: ";
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cout << "Enter new aisle: ";
             std::getline(std::cin, aisle);
         } else if (choice != 'y' && choice != 'Y') {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
         
         GroceryItem updatedItem(name, upcCode, price, quantity, aisle);
         inventory.update(upcCode, updatedItem);
         
-        std::cout << "Item updated successfully!" << std::endl;
+        cout << "Item updated successfully!" << endl;
     } else {
-        std::cout << "Item with UPC " << upcCode << " not found." << std::endl;
+        cout << "Item with UPC " << upcCode << " not found." << endl;
     }
 }
 
 void deleteItem(AVLTree& inventory) {
-    std::string upcCode;
+    string upcCode;
     
-    std::cout << "\n--- Delete Item ---" << std::endl;
-    std::cout << "Enter UPC Code of the item to delete: ";
-    std::cin >> upcCode;
+    cout << "\n--- Delete Item ---" << endl;
+    cout << "Enter UPC Code of the item to delete: ";
+    cin >> upcCode;
     
     if (inventory.remove(upcCode)) {
-        std::cout << "Item deleted successfully!" << std::endl;
+        cout << "Item deleted successfully!" << endl;
     } else {
-        std::cout << "Item with UPC " << upcCode << " not found." << std::endl;
+        cout << "Item with UPC " << upcCode << " not found." << endl;
     }
 }
 
@@ -165,7 +171,7 @@ int main() {
     
     do {
         displayMenu();
-        std::cin >> choice;
+        cin >> choice;
         
         switch (choice) {
             case 1:
@@ -184,10 +190,10 @@ int main() {
                 inventory.displayAllItems();
                 break;
             case 0:
-                std::cout << "Exiting program. Goodbye!" << std::endl;
+                cout << "Exiting program. Goodbye!" << endl;
                 break;
             default:
-                std::cout << "Invalid choice. Please try again." << std::endl;
+                cout << "Invalid choice. Please try again." << endl;
         }
     } while (choice != 0);
     
