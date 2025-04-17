@@ -9,7 +9,7 @@ using std::string;
 using std::endl;
 
 void displayMenu() {
-    cout << "\n===== GROCERY STORE INVENTORY SYSTEM =====" << endl;
+    std::cout << "\n===== GROCERY STORE INVENTORY SYSTEM =====" << endl;
     cout << "1. Add New Item" << endl;
     cout << "2. Find Item by UPC" << endl;
     cout << "3. Update Item" << endl;
@@ -24,7 +24,7 @@ void addItem(AVLTree& inventory) {
     double price;
     int quantity;
     
-    cout << "\n--- Add New Item ---" << endl;
+    std::cout << "\n--- Add New Item ---" << endl;
     
     cout << "Enter UPC Code: ";
     cin >> upcCode;
