@@ -195,52 +195,57 @@ int main() {
                 inventory.displayAllItems();
                 break;
             case 6: {
-                cout << "\n--- Shopping Cart Menu ---" << endl;
-                cout << "1. Add Item to Cart" << endl;
-                cout << "2. Remove Item from Cart" << endl;
-                cout << "3. Display Cart" << endl;
-                cout << "4. Clear Cart" << endl;
-                cout << "0. Exit Cart" << endl;
-                cout << "Enter your choice: ";
-                cin >> cart_choice;
-                if (cart_choice == 0) {
-                    cout << "Exiting cart menu." << endl;
-                    break;
+                bool stayInCartMenu = true;
+                while (stayInCartMenu) {
+                    cout << "\n--- Shopping Cart Menu ---" << endl;
+                    cout << "1. Add Item to Cart" << endl;
+                    cout << "2. Remove Item from Cart" << endl;
+                    cout << "3. Display Cart" << endl;
+                    cout << "4. Clear Cart" << endl;
+                    cout << "0. Exit Cart" << endl;
+                    cout << "Enter your choice: ";
+                    cin >> cart_choice;
+                    if (cart_choice == 0) {
+                        cout << "Exiting cart menu." << endl;
+                        break;
+                    }
+                    string upccode;
+                    int quantity;
+                    switch (cart_choice)
+                    {
+                    case 1:
+                        cout << "Enter UPC Code: ";
+                        cin >> upccode;
+                        cout << "Enter Quantity you want to add: ";
+                        cin >> quantity;
+                        cart.addItem(inventory, upccode, quantity);
+                        cout << "Item added to cart." << endl;
+                        break;
+                    case 2:
+                        cout << "Enter UPC Code: ";
+                        cin >> upccode;
+                        cout << "Enter Quantity you want to remove: ";
+                        cin >> quantity;
+                        cart.removeItem(inventory, upccode, quantity);
+                        cout << "Item removed from cart." << endl;
+                        break;
+                    case 3:
+                        cout << "\n--- Shopping Cart ---" << endl;
+                        cart.displayCart();
+                        break;
+                    case 4:
+                        cart.clearCart();
+                        cout << "Cart cleared." << endl;
+                        break;
+                    case 0:
+                        cout << "Exiting cart menu." << endl;
+                        stayInCartMenu = false;
+                        break;
+                    default:
+                        cout << "Invalid choice. Please try again." << endl;
+                    }
                 }
-                string upccode;
-                int quantity;
-                switch (cart_choice)
-                {
-                case 1:
-                    cout << "Enter UPC Code: ";
-                    cin >> upccode;
-                    cout << "Enter Quantity you want to add: ";
-                    cin >> quantity;
-                    cart.addItem(inventory, upccode, quantity);
-                    cout << "Item added to cart." << endl;
-                    break;
-                case 2:
-                    cout << "Enter UPC Code: ";
-                    cin >> upccode;
-                    cout << "Enter Quantity you want to remove: ";
-                    cin >> quantity;
-                    cart.removeItem(inventory, upccode, quantity);
-                    cout << "Item removed from cart." << endl;
-                    break;
-                case 3:
-                    cout << "\n--- Shopping Cart ---" << endl;
-                    cart.displayCart();
-                    break;
-                case 4:
-                    cart.clearCart();
-                    cout << "Cart cleared." << endl;
-                    break;
-                case 0:
-                    cout << "Exiting cart menu." << endl;
-                    break;
-                default:
-                    cout << "Invalid choice. Please try again." << endl;
-                }
+                break;
             }
             case 0:
                 cout << "Exiting program. Goodbye!" << endl;
