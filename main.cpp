@@ -2,6 +2,7 @@
 #include <limits>
 #include "AVLTree.h"
 #include "ShoppingCart.h"
+#include "TransactionProcessing.h" 
 
 //Namespace directives to clean up code
 using std::cout;
@@ -16,7 +17,8 @@ void displayMenu() {
     cout << "3. Update Item" << endl;
     cout << "4. Delete Item" << endl;
     cout << "5. Display All Items" << endl;
-    cout <<"6. Shopping Cart" << endl;
+    cout << "6. Shopping Cart" << endl;
+    cout << "7. Transaction Reports" << endl;
     cout << "0. Exit" << endl;
     cout << "Enter your choice: ";
 }
@@ -160,7 +162,44 @@ void deleteItem(AVLTree& inventory) {
     }
 }
 
+void processCheckout(AVLTree& inventory, ShoppingCart& cart, TransactionManager& transactionManager) {
+    if (cart.isEmpty()) {
+        cout << "Your cart is empty. Nothing to checkout." << endl;
+        return;
+    }
 
+    // Display cart contents
+    cout << "\n--- Checkout ---" << endl;
+    cart.displayCart();
+    
+    // Calculate totals
+    double subtotal = cart.getTotal();
+    double tax = subtotal * 0.0825; // 8.25% tax rate
+    double total = subtotal + tax;
+    
+    // Display receipt
+    cout << "\n--- Receipt ---" << endl;
+    cout << "Subtotal: $" << std::fixed << std::setprecision(2) << subtotal << endl;
+    cout << "Tax (8.25%): $" << std::fixed << std::setprecision(2) << tax << endl;
+    cout << "Total: $" << std::fixed << std::setprecision(2) << total << endl;
+
+    // Record the transaction
+    int transactionId = transactionManager.addTransaction(
+        -1, // Guest customer ID
+        "Guest", // Customer name
+        cart.getItems(),
+        subtotal,
+        0.0, // Discount amount
+        tax,
+        total
+    );
+
+    cout << "Transaction #" << transactionId << " has been recorded." << endl;
+    
+    // Clear the cart
+    cart.clearCart();
+    cout << "Thank you for your purchase!" << endl;
+}
 
 int main() {
     AVLTree inventory;
@@ -168,6 +207,7 @@ int main() {
     
     int cart_choice;
     ShoppingCart cart;
+    TransactionManager transactionManager;
 
     inventory.insert(GroceryItem("Milk", "100001", 3.99, 50, "Dairy"));
     inventory.insert(GroceryItem("Bread", "100002", 2.49, 30, "Bakery"));
@@ -202,6 +242,7 @@ int main() {
                     cout << "2. Remove Item from Cart" << endl;
                     cout << "3. Display Cart" << endl;
                     cout << "4. Clear Cart" << endl;
+                    cout << "5. Checkout" << endl;
                     cout << "0. Exit Cart" << endl;
                     cout << "Enter your choice: ";
                     cin >> cart_choice;
@@ -237,6 +278,9 @@ int main() {
                         cart.clearCart();
                         cout << "Cart cleared." << endl;
                         break;
+                    case 5:
+                        processCheckout(inventory, cart, transactionManager);
+                        break;
                     case 0:
                         cout << "Exiting cart menu." << endl;
                         stayInCartMenu = false;
@@ -244,6 +288,71 @@ int main() {
                     default:
                         cout << "Invalid choice. Please try again." << endl;
                     }
+                }
+                break;
+            }
+            case 7: {
+                // Transaction Reports
+                std::cout << "\n===== Transaction Reports =====\n";
+                std::cout << "1. View all transactions\n";
+                std::cout << "2. Generate sales report\n";
+                std::cout << "3. Find transaction by ID\n";
+                std::cout << "4. View customer transactions\n";
+                std::cout << "0. Return to main menu\n";
+                std::cout << "Choice: ";
+                
+                int reportChoice;
+                std::cin >> reportChoice;
+                
+                switch (reportChoice) {
+                    case 1:
+                        // View all transactions
+                        transactionManager.displayAllTransactions();
+                        break;
+                    case 2:
+                        // Generate sales report
+                        transactionManager.generateSalesReport();
+                        break;
+                    case 3: {
+                        // Find transaction by ID
+                        int transactionId;
+                        std::cout << "Enter transaction ID: ";
+                        std::cin >> transactionId;
+                        
+                        const Transaction* transaction = transactionManager.findTransaction(transactionId);
+                        if (transaction != nullptr) {
+                            transaction->displayDetails();
+                        } else {
+                            std::cout << "Transaction not found.\n";
+                        }
+                        break;
+                    }
+                    case 4: {
+                        // View customer transactions
+                        int customerId;
+                        std::cout << "Enter customer ID: ";
+                        std::cin >> customerId;
+                        
+                        std::vector<const Transaction*> customerTransactions = 
+                            transactionManager.getTransactionsByCustomer(customerId);
+                        
+                        if (customerTransactions.empty()) {
+                            std::cout << "No transactions found for this customer.\n";
+                        } else {
+                            std::cout << "Found " << customerTransactions.size() 
+                                    << " transactions for customer ID " << customerId << ":\n";
+                            
+                            for (const auto* transaction : customerTransactions) {
+                                transaction->displayDetails();
+                            }
+                        }
+                        break;
+                    }
+                    case 0:
+                        // Return to main menu
+                        break;
+                    default:
+                        std::cout << "Invalid choice.\n";
                 }
                 break;
             }
@@ -257,4 +366,3 @@ int main() {
     
     return 0;
 }
-
