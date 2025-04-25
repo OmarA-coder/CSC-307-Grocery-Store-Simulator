@@ -1,0 +1,27 @@
+Project Name: Grocery Store Simulation
+
+Members: Omar Abdelkhaleq, Muhammad Abdullah Shaikh, Samir Bhattarai, Trinav Dhakal
+
+Classes:
+GroceryItem: Represents each item in the store.
+AVLTree: Manages the inventory efficiently with balanced trees.
+ShoppingCart: Manages a customer’s shopping cart and checkout process.
+Transaction and TransactionManager: Handles checkout transactions and saves them to a file.
+
+Data Structures Used:
+AVL Tree for inventory management (fast search, insert, delete).
+Vector for ShoppingCart items.
+Vector for Transaction records.
+
+CRUD Operations:
+Inventory items can be created, read (searched), updated, and deleted.
+Cart items can be added, removed, displayed, and cleared.
+Transactions can be recorded and retrieved.
+
+Testing:
+Inserted 5 items initially and verified search/update/delete.
+Performed a checkout with multiple items and verified receipt and transaction logging.
+Loaded saved transactions and verified accurate history retrieval.
+
+Known Bugs:
+
