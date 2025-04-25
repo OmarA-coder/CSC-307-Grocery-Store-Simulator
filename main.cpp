@@ -1,6 +1,7 @@
 #include <iostream>
 #include <limits>
 #include "AVLTree.h"
+#include "ShoppingCart.h"
 
 //Namespace directives to clean up code
 using std::cout;
@@ -15,6 +16,7 @@ void displayMenu() {
     cout << "3. Update Item" << endl;
     cout << "4. Delete Item" << endl;
     cout << "5. Display All Items" << endl;
+    cout <<"6. Shopping Cart" << endl;
     cout << "0. Exit" << endl;
     cout << "Enter your choice: ";
 }
@@ -158,10 +160,14 @@ void deleteItem(AVLTree& inventory) {
     }
 }
 
+
+
 int main() {
     AVLTree inventory;
     int choice;
     
+    int cart_choice;
+    ShoppingCart cart;
 
     inventory.insert(GroceryItem("Milk", "100001", 3.99, 50, "Dairy"));
     inventory.insert(GroceryItem("Bread", "100002", 2.49, 30, "Bakery"));
@@ -172,8 +178,7 @@ int main() {
     do {
         displayMenu();
         cin >> choice;
-        
-        switch (choice) {
+        switch(choice) {
             case 1:
                 addItem(inventory);
                 break;
@@ -189,6 +194,54 @@ int main() {
             case 5:
                 inventory.displayAllItems();
                 break;
+            case 6: {
+                cout << "\n--- Shopping Cart Menu ---" << endl;
+                cout << "1. Add Item to Cart" << endl;
+                cout << "2. Remove Item from Cart" << endl;
+                cout << "3. Display Cart" << endl;
+                cout << "4. Clear Cart" << endl;
+                cout << "0. Exit Cart" << endl;
+                cout << "Enter your choice: ";
+                cin >> cart_choice;
+                if (cart_choice == 0) {
+                    cout << "Exiting cart menu." << endl;
+                    break;
+                }
+                string upccode;
+                int quantity;
+                switch (cart_choice)
+                {
+                case 1:
+                    cout << "Enter UPC Code: ";
+                    cin >> upccode;
+                    cout << "Enter Quantity you want to add: ";
+                    cin >> quantity;
+                    cart.addItem(inventory, upccode, quantity);
+                    cout << "Item added to cart." << endl;
+                    break;
+                case 2:
+                    cout << "Enter UPC Code: ";
+                    cin >> upccode;
+                    cout << "Enter Quantity you want to remove: ";
+                    cin >> quantity;
+                    cart.removeItem(inventory, upccode, quantity);
+                    cout << "Item removed from cart." << endl;
+                    break;
+                case 3:
+                    cout << "\n--- Shopping Cart ---" << endl;
+                    cart.displayCart();
+                    break;
+                case 4:
+                    cart.clearCart();
+                    cout << "Cart cleared." << endl;
+                    break;
+                case 0:
+                    cout << "Exiting cart menu." << endl;
+                    break;
+                default:
+                    cout << "Invalid choice. Please try again." << endl;
+                }
+            }
             case 0:
                 cout << "Exiting program. Goodbye!" << endl;
                 break;

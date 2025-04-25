@@ -1,3 +1,7 @@
+#ifndef AVLTREE_H
+#define AVLTREE_H
+
+
 #include <iostream>
 #include <algorithm>
 #include "GroceryItem.h"
@@ -256,3 +260,6 @@ public:
         return root == nullptr;
     }
 };
+
+
+#endif 
