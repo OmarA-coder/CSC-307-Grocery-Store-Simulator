@@ -9,7 +9,7 @@
 #include <map>
 #include <string>
 #include <fstream>
-#include "Item.h" 
+#include "GroceryItem.h" 
 
 // Transaction class to track customer purchases
 class Transaction {
@@ -17,7 +17,7 @@ private:
     int transactionId;
     int customerId; // -1 for guest checkout
     std::string customerName;
-    std::vector<std::pair<Item, int>> items; // Pairs of item and quantity
+    std::vector<std::pair<GroceryItem, int>> items; // Pairs of item and quantity
     double subtotal;
     double discount;
     double tax;
@@ -29,12 +29,12 @@ private:
 public:
     // Constructor for new transactions
     Transaction(int id, int custId, std::string custName, 
-                const std::vector<std::pair<Item, int>>& cartItems,
+                const std::vector<std::pair<GroceryItem, int>>& cartItems,
                 double subt, double disc, double tx, double tot);
     
     // Constructor for loading transactions from file
     Transaction(int id, int custId, std::string custName, 
-                const std::vector<std::pair<Item, int>>& cartItems,
+                const std::vector<std::pair<GroceryItem, int>>& cartItems,
                 double subt, double disc, double tx, double tot, 
                 const std::string& ts);
     
@@ -42,7 +42,7 @@ public:
     int getTransactionId() const;
     int getCustomerId() const;
     std::string getCustomerName() const;
-    const std::vector<std::pair<Item, int>>& getItems() const;
+    const std::vector<std::pair<GroceryItem, int>>& getItems() const;
     double getSubtotal() const;
     double getDiscount() const;
     double getTax() const;
@@ -71,7 +71,7 @@ public:
     
     // Add a new transaction
     int addTransaction(int customerId, const std::string& customerName,
-                      const std::vector<std::pair<Item, int>>& items,
+                      const std::vector<std::pair<GroceryItem, int>>& items,
                       double subtotal, double discount, double tax, double total);
     
     // Find transactions
