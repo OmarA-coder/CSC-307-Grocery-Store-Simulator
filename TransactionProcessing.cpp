@@ -20,7 +20,7 @@ std::string Transaction::getCurrentTimestamp() {
 
 // Constructor for new transactions
 Transaction::Transaction(int id, int custId, std::string custName, 
-            const std::vector<std::pair<Item, int>>& cartItems,
+            const std::vector<std::pair<GroceryItem, int>>& cartItems,
             double subt, double disc, double tx, double tot)
     : transactionId(id), customerId(custId), customerName(custName),
       items(cartItems), subtotal(subt), discount(disc), tax(tx), total(tot) {
@@ -29,7 +29,7 @@ Transaction::Transaction(int id, int custId, std::string custName,
 
 // Constructor for loading transactions from file
 Transaction::Transaction(int id, int custId, std::string custName, 
-            const std::vector<std::pair<Item, int>>& cartItems,
+            const std::vector<std::pair<GroceryItem, int>>& cartItems,
             double subt, double disc, double tx, double tot, 
             const std::string& ts)
     : transactionId(id), customerId(custId), customerName(custName),
@@ -41,7 +41,7 @@ Transaction::Transaction(int id, int custId, std::string custName,
 int Transaction::getTransactionId() const { return transactionId; }
 int Transaction::getCustomerId() const { return customerId; }
 std::string Transaction::getCustomerName() const { return customerName; }
-const std::vector<std::pair<Item, int>>& Transaction::getItems() const { return items; }
+const std::vector<std::pair<GroceryItem, int>>& Transaction::getItems() const { return items; }
 double Transaction::getSubtotal() const { return subtotal; }
 double Transaction::getDiscount() const { return discount; }
 double Transaction::getTax() const { return tax; }
