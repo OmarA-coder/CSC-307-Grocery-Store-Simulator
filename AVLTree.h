@@ -4,6 +4,9 @@
 
 #include <iostream>
 #include <algorithm>
+#include <fstream>
+#include <string>
+#include <sstream>
 #include "GroceryItem.h"
 
 class AVLTree {
@@ -182,6 +185,32 @@ private:
             
         return searchNode(root->right, upcCode);
     }
+
+    Node* updateNode(Node* root, const std::string& upcCode, const GroceryItem& newItem) {
+        if (root == nullptr) return nullptr;
+        
+        if (upcCode < root->item.getUpcCode()) {
+            root->left = updateNode(root->left, upcCode, newItem);
+        } else if (upcCode > root->item.getUpcCode()) {
+            root->right = updateNode(root->right, upcCode, newItem);
+        } else {
+            root->item = newItem;
+        }
+        
+        return root;
+    }
+
+    void displayAllItemsHelper(Node* node) const {
+        if (node == nullptr) return;
+        
+        displayAllItemsHelper(node->left);
+        std::cout << "UPC: " << node->item.getUpcCode() 
+                  << ", Name: " << node->item.getName() 
+                  << ", Price: $" << node->item.getPrice() 
+                  << ", Quantity: " << node->item.getQuantity()
+                  << ", Aisle: " << node->item.getAisle() << std::endl;
+        displayAllItemsHelper(node->right);
+    }
     
     void inOrderTraversal(Node* node) const {
         if (node == nullptr) return;
@@ -225,12 +254,11 @@ public:
     }
     
     // Update operation - Update an existing item
-    bool update(const std::string& upcCode, const GroceryItem& newItem) {
-        Node* node = searchNode(root, upcCode);
-        if (node == nullptr) {
+    bool update( const std::string& upcCode, const GroceryItem& newItem) {
+        if(search(upcCode) == nullptr) {
             return false;
         }
-        node->item = newItem;
+        root = updateNode(root, upcCode, newItem);
         return true;
     }
     
@@ -249,9 +277,9 @@ public:
             std::cout << "Inventory is empty." << std::endl;
             return;
         }
-        
+    
         std::cout << "-------- GROCERY INVENTORY --------" << std::endl;
-        inOrderTraversal(root);
+        displayAllItemsHelper(root);
         std::cout << "----------------------------------" << std::endl;
     }
     
@@ -259,7 +287,66 @@ public:
     bool isEmpty() const {
         return root == nullptr;
     }
+    // Load inventory from a file
+    void loadFromFile(const std::string& filename) {
+        std:: ifstream file(filename);
+        if (!file) {
+            std::cerr << "Error opening file: " << filename << std::endl;
+            return;
+        }
+        std::string line;
+        int lineNum = 0;
+        while (std::getline(file, line)){
+            lineNum++;
+            if (line.empty()) continue; // Skip empty lines
+            std::istringstream iss(line);
+            std::string name, upcCode, price, quantity, aisle;
+            double priceValue;
+            int quantityValue;
+            
+            if (std::getline(iss, upcCode, ',') &&    // Read Field 1 into upcCode_val
+                std::getline(iss, name, ',') &&       // Read Field 2 into name_val
+                std::getline(iss, price, ',') &&      // Read Field 3 into price_str
+                std::getline(iss, quantity, ',') &&   // Read Field 4 into quantity_str
+                std::getline(iss, aisle)) {
+                
+                priceValue = std::stod(price);
+                quantityValue = std::stoi(quantity);
+                GroceryItem item(name, upcCode, priceValue, quantityValue, aisle);
+                insert(item);
+            }
+        }
+        file.close();
+
+    }
+    // Save inventory to a file
+    void saveToFile(const std::string& filename) const {
+        std::ofstream file(filename);
+        if (!file) {
+            std::cerr << "Error opening file: " << filename << std::endl;
+            return;
+        }
+        saveToFileHelper(root, file);
+        file.close();
+    }
+    void saveToFileHelper(Node* node, std::ofstream& file) const {
+        if (node == nullptr) return;
+        
+        saveToFileHelper(node->left, file);
+        file << node->item.getName() << ","
+             << node->item.getUpcCode() << ","
+             << node->item.getPrice() << ","
+             << node->item.getQuantity() << ","
+             << node->item.getAisle() << "\n";
+        saveToFileHelper(node->right, file);
+    }
+    // Clear the entire tree
+    void clear() {
+        clearTree(root);
+        root = nullptr;
+    }
 };
+
 
 
 #endif 

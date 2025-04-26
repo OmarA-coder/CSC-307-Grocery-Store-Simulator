@@ -1,0 +1,5 @@
+Milk,100001,3.99,90,Dairy
+Bread,100002,2.49,20,Bakery
+Eggs,100003,4.29,40,Dairy
+Apples,100004,1.99,100,Produce
+Chicken,100005,8.99,20,Meat

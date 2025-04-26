@@ -7,7 +7,49 @@
 using std::cout;
 using std::cin;
 using std::string;
+using std::ifstream;
+using std::getline;
 using std::endl;
+
+bool loadInventoryFromFile(AVLTree& inventory, const string& filename){
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cout << "Error: Could not open file " << filename << endl;
+        return false;
+    }
+    
+    cout << "Loading inventory from file..." << endl;
+    string line;
+    string upcCode, name, price_str, quantity_str, aisle;
+    double price;
+    int quantity;
+    int lineNum = 0;
+
+    while (getline(file, line)) {
+        lineNum++;
+        std::istringstream iss(line);
+        if (std::getline(iss, name, ',') && 
+            std::getline(iss, upcCode, ',') && 
+            std::getline(iss, price_str, ',') && 
+            std::getline(iss, quantity_str, ',') && 
+            std::getline(iss, aisle)) {
+            try {
+                price = std::stod(price_str);
+                quantity = std::stoi(quantity_str);
+                GroceryItem item(name, upcCode, price, quantity, aisle);
+                inventory.insert(item);
+            } catch (const std::invalid_argument& e) {
+                cout << "Error: Invalid data on line " << lineNum << endl;
+            }
+        } else {
+            cout << "Error: Invalid format on line " << lineNum << endl;
+        }
+    }
+    file.close();
+    cout << "Inventory loaded successfully!" << endl;
+    return true;
+}
+
 
 void displayMenu() {
     std::cout << "\n===== GROCERY STORE INVENTORY SYSTEM =====" << endl;
@@ -17,6 +59,7 @@ void displayMenu() {
     cout << "4. Delete Item" << endl;
     cout << "5. Display All Items" << endl;
     cout <<"6. Shopping Cart" << endl;
+    cout << "7. Checkout" << endl;
     cout << "0. Exit" << endl;
     cout << "Enter your choice: ";
 }
@@ -168,12 +211,18 @@ int main() {
     
     int cart_choice;
     ShoppingCart cart;
-
-    inventory.insert(GroceryItem("Milk", "100001", 3.99, 50, "Dairy"));
-    inventory.insert(GroceryItem("Bread", "100002", 2.49, 30, "Bakery"));
-    inventory.insert(GroceryItem("Eggs", "100003", 4.29, 40, "Dairy"));
-    inventory.insert(GroceryItem("Apples", "100004", 1.99, 100, "Produce"));
-    inventory.insert(GroceryItem("Chicken", "100005", 8.99, 20, "Meat"));
+    string filename = "inventory.txt";
+    if (!loadInventoryFromFile(inventory, filename)) {
+        cout << "Failed to load inventory from file." << endl;
+        return 1;
+    }
+    // Initial test data (Inserted in the inventory.text file)
+    // inventory.insert(GroceryItem("Milk", "100001", 3.99, 50, "Dairy"));
+    // inventory.insert(GroceryItem("Bread", "100002", 2.49, 30, "Bakery"));
+    // inventory.insert(GroceryItem("Eggs", "100003", 4.29, 40, "Dairy"));
+    // inventory.insert(GroceryItem("Apples", "100004", 1.99, 100, "Produce"));
+    // inventory.insert(GroceryItem("Chicken", "100005", 8.99, 20, "Meat"));
+    
     
     do {
         displayMenu();
@@ -247,14 +296,31 @@ int main() {
                 }
                 break;
             }
+            case 7:
+                cart.checkout();
+                break;
             case 0:
-                cout << "Exiting program. Goodbye!" << endl;
+                cout << "Exiting program" << endl;
                 break;
             default:
                 cout << "Invalid choice. Please try again." << endl;
         }
     } while (choice != 0);
-    
+    // Save inventory to file before exiting
+    std::ofstream outFile(filename);
+    cout << "Saving inventory to " << filename << "..." << endl;
+    if(inventory.isEmpty()){
+        cout << "Inventory is empty. No items to save." << endl;
+    } else {
+        inventory.saveToFile(filename);
+        cout << "Inventory saved successfully!" << endl;
+    }
+    cout << "Exiting program." << endl;
+    // Free memory
+    inventory.clear();
+    cart.clearCart();
+    cout << "Memory cleared." << endl;
+    cout << "Goodbye!" << endl;
     return 0;
 }
 
