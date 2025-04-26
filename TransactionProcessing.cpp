@@ -61,7 +61,7 @@ void Transaction::displayDetails() const {
     std::cout << "Items purchased:\n";
     for (const auto& pair : items) {
         std::cout << "- " << pair.first.getName() 
-                  << " (UPC: " << pair.first.getUPC() << ")"
+                  << " (UPC: " << pair.first.getUpcCode() << ")"
                   << " x" << pair.second
                   << " @ $" << std::fixed << std::setprecision(2) << pair.first.getPrice()
                   << " = $" << std::fixed << std::setprecision(2) 
@@ -93,7 +93,7 @@ std::string Transaction::toCSV() const {
     ss << ",";
     for (size_t i = 0; i < items.size(); ++i) {
         if (i > 0) ss << ";";
-        ss << items[i].first.getUPC() << "," 
+        ss << items[i].first.getUpcCode() << "," 
            << items[i].second << "," 
            << items[i].first.getPrice();
     }
@@ -178,7 +178,7 @@ bool TransactionManager::loadFromFile() {
                     double price = std::stod(itemTokens[2]);
                     
                     // Create a simplified item (without name and aisle)
-                    Item item(upc, "Item #" + std::to_string(upc), price, 0, "");
+                    GroceryItem item(upc, "Item #" + std::to_string(upc), price, 0, "");
                     items.push_back(std::make_pair(item, quantity));
                 }
             }
@@ -201,7 +201,7 @@ bool TransactionManager::loadFromFile() {
 
 // Add a new transaction
 int TransactionManager::addTransaction(int customerId, const std::string& customerName,
-                  const std::vector<std::pair<Item, int>>& items,
+                  const std::vector<std::pair<GroceryItem, int>>& items,
                   double subtotal, double discount, double tax, double total) {
     int transactionId = nextTransactionId++;
     
@@ -312,10 +312,10 @@ void TransactionManager::generateSalesReport() const {
     std::map<int, std::pair<std::string, int>> productSales; // UPC -> (Name, Quantity)
     for (const auto& transaction : transactions) {
         for (const auto& item : transaction.getItems()) {
-            if (productSales.find(item.first.getUPC()) == productSales.end()) {
-                productSales[item.first.getUPC()] = std::make_pair(item.first.getName(), 0);
+            if (productSales.find(item.first.getUpcCode()) == productSales.end()) {
+                productSales[item.first.getUpcCode()] = std::make_pair(item.first.getName(), 0);
             }
-            productSales[item.first.getUPC()].second += item.second;
+            productSales[item.first.getUpcCode()].second += item.second;
         }
     }
     
