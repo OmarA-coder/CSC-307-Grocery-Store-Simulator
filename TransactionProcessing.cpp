@@ -159,7 +159,7 @@ bool TransactionManager::loadFromFile() {
             std::string timestamp = tokens[7];
             
             // Parse items (UPC,Quantity,Price;UPC,Quantity,Price;...)
-            std::vector<std::pair<Item, int>> items;
+            std::vector<std::pair<GroceryItem, int>> items;
             std::istringstream itemsStream(tokens[8]);
             std::string itemData;
             
